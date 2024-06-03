@@ -4,15 +4,17 @@ LABEL org.opencontainers.image.authors="younesmaleki.programming@gmail.com"
 LABEL version="0.1"
 
 # نصب ابزارهای لازم
-RUN apk add --no-cache gcc musl-dev libffi-dev
+RUN apk add --no-cache gcc musl-dev libffi-dev libpq postgresql-dev
+
+# اضافه کردن wait-for-it
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
 
 COPY ./requirements /requirements
 COPY ./scripts /scripts
 COPY ./src /src
 
-WORKDIR src
-
-EXPOSE 8000
+WORKDIR /src
 
 # استفاده از pip در مسیر استاندارد
 RUN pip install --upgrade pip
@@ -29,4 +31,6 @@ ENV PATH="/scripts:/usr/local/bin:$PATH"
 
 USER djshop
 
-CMD ["sh", "/scripts/run.sh"]
+EXPOSE 8000
+
+CMD ["sh", "-c", "/wait-for-it.sh db:5432 -- /scripts/run.sh"]
