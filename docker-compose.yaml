@@ -25,7 +25,7 @@ services:
     environment:
       - POSTGRES_DB=djshop
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=asdf1997
+      - POSTGRES_PASSWORD=jonasmaleki
 
 volumes:
   djshop-data:
